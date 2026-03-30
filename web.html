@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Udayan | AI & Game Dev // 2026</title>
+    <style>
+        :root {
+            --bg: #050509;
+            --text: #ffffff;
+            --neon-pink: #ff0055;
+            --neon-blue: #00f2ff;
+            --matrix-green: #00ff41;
+            --card-bg: rgba(17, 17, 29, 0.9);
+            --font-main: 'Arial Black', Gadget, sans-serif;
+            --font-code: 'Courier New', Courier, monospace;
+        }
+        
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: var(--font-code);
+            margin: 0;
+            overflow-x: hidden;
+            /* The Neon Blue Grid you wanted to keep */
+            background-image: 
+                linear-gradient(0deg, transparent 24%, rgba(0, 242, 255, .05) 25%, rgba(0, 242, 255, .05) 26%, transparent 27%, transparent 74%, rgba(0, 242, 255, .05) 75%, rgba(0, 242, 255, .05) 76%, transparent 77%, transparent), 
+                linear-gradient(90deg, transparent 24%, rgba(0, 242, 255, .05) 25%, rgba(0, 242, 255, .05) 26%, transparent 27%, transparent 74%, rgba(0, 242, 255, .05) 75%, rgba(0, 242, 255, .05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+        }
+
+        /* --- THE MATRIX RAIN CANVAS --- */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: -1; /* Sits behind the text but above the blue grid */
+            opacity: 0.2; /* Subtle enough to look premium */
+        }
+
+        /* --- Global Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        @keyframes glitch {
+            2%, 64% { transform: translate(2px,0) skew(0deg); }
+            4%, 60% { transform: translate(-2px,0) skew(0deg); }
+            62% { transform: translate(0,0) skew(5deg); }
+        }
+
+        @keyframes glitchTop {
+            2%, 64% { transform: translate(2px,-2px); }
+            4%, 60% { transform: translate(-2px,2px); }
+            62% { transform: translate(13px,-1px) skew(-13deg); }
+        }
+
+        @keyframes glitchBottom {
+            2%, 64% { transform: translate(-2px,0); }
+            4%, 60% { transform: translate(-2px,0); }
+            62% { transform: translate(-22px,5px) skew(21deg); }
+        }
+
+        /* --- Hero Section (The Calm Entry) --- */
+        .hero {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .cyber-logo {
+            font-family: var(--font-main);
+            font-size: clamp(50px, 10vw, 80px);
+            letter-spacing: -5px;
+            color: var(--text);
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink);
+            animation: glitch 1s linear infinite;
+        }
+
+        .cyber-logo::before, .cyber-logo::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+        }
+        
+        .cyber-logo::before { left: 2px; text-shadow: -2px 0 var(--neon-blue); clip: rect(44px, 450px, 56px, 0); animation: glitchTop 1s linear infinite; }
+        .cyber-logo::after { left: -2px; text-shadow: -2px 0 var(--neon-pink); clip: rect(85px, 450px, 140px, 0); animation: glitchBottom 1.5s linear infinite; }
+
+        .hero p { font-size: 18px; color: var(--neon-blue); text-shadow: 0 0 5px var(--neon-blue); margin-top: 10px; opacity: 0.8;}
+
+        .bio-box {
+            max-width: 650px;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.7);
+            border-left: 3px solid var(--neon-pink);
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: left;
+            animation: fadeIn 2s ease-out;
+        }
+
+        /* --- THE CYBER BUTTON --- */
+        .cyber-btn {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 15px 45px;
+            font-size: 18px;
+            font-family: var(--font-code);
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            overflow: hidden;
+            letter-spacing: 2px;
+            margin-top: 40px;
+        }
+
+        .cyber-btn::after {
+            content: "INITIALIZING AI...";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--neon-blue);
+            color: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .cyber-btn:hover { box-shadow: 0 0 20px var(--neon-blue); color: #fff; border-color: #fff; }
+        .cyber-btn:hover::after { transform: translateY(0); }
+        .cyber-btn:active { animation: glitch 0.2s linear infinite; background-color: var(--neon-pink); border: none; }
+
+        /* --- Projects Grid --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid #222;
+            padding: 35px;
+            position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeIn 1s ease-out both;
+        }
+
+        .card:hover { transform: scale(1.03); border-color: var(--neon-pink); box-shadow: 0 0 20px rgba(255, 0, 85, 0.2); }
+
+        .card::before {
+            content: ''; position: absolute; top: 10px; left: 10px; width: 10px; height: 10px;
+            border-top: 2px solid var(--neon-blue); border-left: 2px solid var(--neon-blue);
+        }
+
+        .card h3 { font-family: var(--font-main); font-size: 22px; color: #fff; margin-top: 0; }
+        .card p { color: #ccc; font-size: 14px; line-height: 1.6; }
+        .tag { color: var(--matrix-green); border: 1px solid var(--matrix-green); padding: 2px 8px; font-size: 10px; margin-right: 5px; }
+
+        footer { 
+            padding: 60px 20px; 
+            border-top: 1px solid #222; 
+            text-align: center; 
+            color: #555; 
+            font-size: 12px;
+        }
+        .utc { color: var(--neon-pink); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <section class="hero">
+        <h1 class="cyber-logo" data-text="UDAYAN">UDAYAN</h1>
+        <p>// AI_ML // COMPUTER_VISION // UE4_PROTOCOL</p>
+        
+        <div class="bio-box">
+            Aspiring Computer Science Engineer Interested in AI/ML, Computer Vision & Game Development. Building projects and learning fundamentals 🚀
+        </div>
+        
+        <a href="https://github.com/Udayan-123" class="cyber-btn">Access Database</a>
+    </section>
+
+    <div class="container">
+        <div class="grid">
+            <div class="card" style="animation-delay: 0.2s;">
+                <h3>PROJECT: DDPM_FACE</h3>
+                <p>Attribute-conditioned diffusion model research. Training high-fidelity generative architectures using PyTorch.</p>
+                <div style="margin-bottom: 15px;">
+                    <span class="tag">PYTORCH</span>
+                    <span class="tag">DDPM</span>
+                </div>
+                <a href="https://github.com/Udayan-123/attribute-face-ddpm" style="color:var(--neon-pink); text-decoration:none; font-weight:bold;">[ VIEW SOURCE ]</a>
+            </div>
+
+            <div class="card" style="animation-delay: 0.4s;">
+                <h3>Neural Training Hub</h3>
+                <p>Computer Vision fundamentals, data curation, and neural synthesis optimization protocols.</p>
+                <div><span class="tag">CV</span><span class="tag">ML</span></div>
+            </div>
+
+            <div class="card" style="animation-delay: 0.6s;">
+                <h3>Engine Architecture</h3>
+                <p>Developing performance-optimized PC logic in Unreal Engine 4.27. Specialized in AI-agent integration.</p>
+                <div><span class="tag">UE4</span><span class="tag">PC_DEV</span></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        LOG_DATE: 2026 // TIMEZONE: <span class="utc">UTC +05:30</span> // STATUS: SYSTEM_ONLINE
+    </footer>
+
+    <script>
+        // Matrix Binary Rain Script
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "01"; // Pure binary for that AI feel
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let i = 0; i < columns; i++) drops[i] = 1;
+
+        function draw() {
+            ctx.fillStyle = "rgba(5, 5, 9, 0.1)"; // Matches your --bg color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#00ff41"; 
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(draw, 50);
+
+        // Adjust canvas on resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
